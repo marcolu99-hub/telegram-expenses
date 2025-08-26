@@ -1,5 +1,4 @@
 import { createClient } from "@supabase/supabase-js";
-import fetch from "node-fetch";
 
 const supabase = createClient(
   process.env.SUPABASE_URL,
@@ -51,7 +50,7 @@ export default async function handler(req, res) {
       return res.status(500).json({ error: error.message });
     }
 
-    // Invia messaggio di conferma al bot
+    // Invia messaggio di conferma al bot usando fetch nativo
     const botToken = process.env.TELEGRAM_BOT_TOKEN;
     const message = `✅ Spesa di €${amount} registrata!`;
 
