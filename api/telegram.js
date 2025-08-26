@@ -1,4 +1,5 @@
 import { createClient } from "@supabase/supabase-js";
+import fetch from "node-fetch";
 
 const supabase = createClient(
   process.env.SUPABASE_URL,
@@ -8,7 +9,7 @@ const supabase = createClient(
 export default async function handler(req, res) {
   if (req.method !== "POST") return res.status(405).json({ message: "Method Not Allowed" });
 
-  // Controllo secret
+  // Controllo secret token
   if (req.headers["x-telegram-bot-api-secret-token"] !== process.env.TELEGRAM_SECRET) {
     return res.status(401).json({ error: "Unauthorized" });
   }
@@ -50,7 +51,21 @@ export default async function handler(req, res) {
       return res.status(500).json({ error: error.message });
     }
 
+    // Invia messaggio di conferma al bot
+    const botToken = process.env.TELEGRAM_BOT_TOKEN;
+    const message = `✅ Spesa di €${amount} registrata!`;
+
+    await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        chat_id: chat_id,
+        text: message
+      })
+    });
+
     return res.status(200).json({ ok: true });
+
   } catch (err) {
     console.error(err);
     return res.status(500).json({ error: "Internal error" });
