@@ -5,6 +5,7 @@ const supabase = createClient(
   process.env.SUPABASE_SERVICE_KEY
 );
 
+// Funzione per calcolare inizio settimana (lunedi)
 function getStartOfWeek(date) {
   const d = new Date(date);
   const day = d.getDay(); // 0 = domenica
@@ -15,6 +16,7 @@ function getStartOfWeek(date) {
 export default async function handler(req, res) {
   if (req.method !== "POST") return res.status(405).json({ message: "Method Not Allowed" });
 
+  // Controllo secret token
   if (req.headers["x-telegram-bot-api-secret-token"] !== process.env.TELEGRAM_SECRET) {
     return res.status(401).json({ error: "Unauthorized" });
   }
@@ -85,7 +87,7 @@ export default async function handler(req, res) {
     const weekSum = sum(weekData || []);
     const monthSum = sum(monthData || []);
 
-    const monthName = today.toLocaleString("default", { month: "long" });
+    const monthName = today.toLocaleString("it-IT", { month: "long" });
 
     // Invia messaggio di conferma
     const botToken = process.env.TELEGRAM_BOT_TOKEN;
