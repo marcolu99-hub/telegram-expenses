@@ -1,0 +1,12 @@
+{
+  "name": "telegram-expenses",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "node-fetch": "^3.3.2",
+    "@supabase/supabase-js": "^2.44.4"
+  }
+}
